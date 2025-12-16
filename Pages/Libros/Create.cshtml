@@ -1,0 +1,41 @@
+@page
+
+<h6>Nuevo Libro</h6>
+
+<form method="post">
+    <div class="mb-3">
+        <label for="titulo" class="form-label">Título</label>
+        <input id="titulo" name="Titulo" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label for="autor" class="form-label">Autor</label>
+        <input id="autor" name="Autor" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label for="editorial" class="form-label">Editorial</label>
+        <input id="editorial" name="Editorial" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label for="isbn" class="form-label">ISBN</label>
+        <input id="isbn" name="ISBN" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Crear</button>
+</form>
+
+@functions {
+    private readonly LibrosRepository _db = new LibrosRepository();
+    public void OnGet() { }
+    public IActionResult OnPost(string Titulo, string Autor, string Editorial, string ISBN)
+    {
+        var libro = new Libro
+        {
+            Id = Guid.NewGuid(),    
+            Titulo = Titulo,
+            Autor = Autor,
+            Editorial = Editorial,
+            ISBN = ISBN
+        };    
+        _db.Insert(libro);
+        return RedirectToPage("/Libros/Index");
+    }
+}

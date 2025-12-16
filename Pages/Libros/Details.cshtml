@@ -1,0 +1,48 @@
+@page
+
+<h6>Detalles del Libro</h6>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Libro.Titulo</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Autor: @Libro.Autor</h6>
+        <h6 class="card-subtitle mb-2 text-muted">Editorial: @Libro.Editorial</h6>
+        <p class="card-text">ISBN: @Libro.ISBN</p>
+    </div>
+</div>
+
+<a href="/Libros" class="btn btn-secondary mt-3">Volver al Listado</a>
+<a href="/Libros/Editar?id=@Libro.Id" class="btn btn-primary mt-3">Editar Libro</a>
+<button class="btn btn-danger mt-3" onclick="confirmDelete()">Eliminar Libro</button>
+
+<form id="deleteForm" method="post">
+    <input type="hidden" name="Id" value="@Libro.Id" />
+</form>
+
+@section Scripts {
+    <script>
+        function confirmDelete() {
+            if (confirm('¿Estás seguro de que deseas eliminar este libro?')) {
+                document.getElementById('deleteForm').submit();
+            } else {
+                return false;
+            }
+        }            
+    </script>
+}
+
+@functions {
+    private readonly LibrosRepository _db = new LibrosRepository();
+
+    public Libro Libro = new Libro();
+
+    public void OnGet(Guid id)
+    {
+        Libro = _db.GetById(id);
+    }
+    public IActionResult OnPost(Guid id)
+    {
+        _db.Delete(id);
+        return RedirectToPage("/Libros/Index");
+    }
+}

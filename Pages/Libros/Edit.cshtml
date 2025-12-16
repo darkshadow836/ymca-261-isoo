@@ -1,0 +1,49 @@
+@page
+
+<h6>Editar Libro</h6>
+
+<form method="post">
+    <input type="hidden" name="Id" value="@Libro.Id" />
+    <div class="mb-3">
+        <label for="titulo" class="form-label">Título</label>
+        <input id="titulo" name="Titulo" class="form-control" value="@Libro.Titulo" />
+    </div>
+    <div class="mb-3">
+        <label for="autor" class="form-label">Autor</label>
+        <input id="autor" name="Autor" class="form-control" value="@Libro.Autor" />
+    </div>
+    <div class="mb-3">
+        <label for="editorial" class="form-label">Editorial</label>
+        <input id="editorial" name="Editorial" class="form-control" value="@Libro.Editorial" />
+    </div>
+    <div class="mb-3">
+        <label for="isbn" class="form-label">ISBN</label>
+        <input id="isbn" name="ISBN" class="form-control" value="@Libro.ISBN" />
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+</form>
+
+@functions {
+    private readonly LibrosRepository _db = new LibrosRepository();
+
+    public Libro Libro = new Libro();
+
+    public void OnGet(Guid id)
+    {
+        Libro = _db.GetById(id);
+    }
+
+    public IActionResult OnPost(Guid id, string Titulo, string Autor, string Editorial, string ISBN)
+    {
+        var libro = new Libro
+        {
+            Id = id,
+            Titulo = Titulo,
+            Autor = Autor,
+            Editorial = Editorial,
+            ISBN = ISBN
+        };
+        _db.Update(libro);
+        return RedirectToPage("/Libros/Index");
+    }
+}

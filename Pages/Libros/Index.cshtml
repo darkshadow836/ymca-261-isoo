@@ -1,0 +1,39 @@
+@page
+<div class="container py-4">
+    <p>
+        <a href="/Libros/Crear" class="btn btn-success">Nuevo Libro</a>
+    </p>
+    <table class="table table-striped table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>Editorial</th>
+                <th>ISBN</th>
+                <th width="30"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var libro in Libros)
+            {
+                <tr>
+                    <td>@libro.Titulo</td>
+                    <td>@libro.Autor</td>
+                    <td>@libro.Editorial</td>
+                    <td>@libro.ISBN</td>
+                    <td>
+                        <a href="/Libros/Detalles?id=@libro.Id" class="btn btn-outline-info btn-sm">Ver</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@functions {
+    private readonly LibrosRepository _db = new LibrosRepository();
+    public List<Libro> Libros = new List<Libro>();
+    public void OnGet()
+    {
+        Libros = _db.GetAll();
+    }
+}
